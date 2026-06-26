@@ -1,0 +1,627 @@
+
+<style>
+:root{--sau-red:#8B1A1A;--sau-red-dark:#6B1010;--sau-red-tint:#F5E8E8;--sau-border:#E8D0D0;--film-bg:#E8F5E9;--film-color:#2E7D32;--film-border:#A5D6A7;--broadcast-bg:#FFFDE7;--broadcast-color:#F57F17;--broadcast-border:#FFE082;--acting-bg:#FFF3E0;--acting-color:#E65100;--acting-border:#FFCC80;--theater-bg:#F5F5F5;--theater-color:#546E7A;--theater-border:#B0BEC5;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);}
+.wrap{padding:.75rem 0 1rem;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;background:var(--sau-red);border-radius:12px;margin-bottom:1.25rem;}
+.logo-area{display:flex;align-items:center;gap:10px;}
+.logo-ko{font-size:15px;font-weight:500;color:#fff;}
+.logo-en{font-size:10px;color:rgba(255,255,255,.6);letter-spacing:.07em;}
+.logo-sub{font-size:11px;color:rgba(255,255,255,.85);margin-top:1px;}
+.nav-btn{padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;border:none;}
+.nav-logout{background:rgba(255,255,255,.15);border:.5px solid rgba(255,255,255,.3);color:#fff;}
+.user-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.15);border:.5px solid rgba(255,255,255,.25);border-radius:8px;padding:5px 10px;}
+.user-chip span{font-size:12px;color:#fff;}
+.auth-wrap{max-width:420px;margin:0 auto;}
+.auth-tabs{display:flex;margin-bottom:1.5rem;border-radius:10px;overflow:hidden;border:1.5px solid var(--sau-border);}
+.auth-tab{flex:1;padding:10px;font-size:13px;font-weight:500;border:none;background:#fff;color:#aaa;cursor:pointer;}
+.auth-tab.active{background:var(--sau-red);color:#fff;}
+.auth-tab:first-child{border-right:.5px solid var(--sau-border);}
+.card{background:#fff;border-radius:14px;border:.5px solid var(--sau-border);padding:2rem;}
+.card-title{font-size:20px;font-weight:500;color:#1a1a1a;margin-bottom:4px;}
+.card-sub{font-size:13px;color:#aaa;margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;font-weight:500;color:#555;margin-bottom:5px;}
+.field input,.field select{width:100%;padding:9px 12px;border-radius:8px;border:.5px solid #ddd;font-size:13px;color:#1a1a1a;background:#fff;}
+.field input:focus,.field select:focus{outline:none;border-color:var(--sau-red);box-shadow:0 0 0 3px rgba(139,26,26,.08);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.field-hint{font-size:11px;color:#bbb;margin-top:4px;}
+.major-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px;}
+.major-btn{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;border:1.5px solid #eee;background:#fff;cursor:pointer;font-size:13px;color:#666;}
+.major-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.major-btn.m-영화{border-color:#A5D6A7;} .major-btn.m-영화.active{background:#E8F5E9;border-color:#2E7D32;color:#2E7D32;font-weight:500;}
+.major-btn.m-방송{border-color:#FFE082;} .major-btn.m-방송.active{background:#FFFDE7;border-color:#F57F17;color:#F57F17;font-weight:500;}
+.major-btn.m-연기{border-color:#FFCC80;} .major-btn.m-연기.active{background:#FFF3E0;border-color:#E65100;color:#E65100;font-weight:500;}
+.major-btn.m-연극{border-color:#B0BEC5;} .major-btn.m-연극.active{background:#F5F5F5;border-color:#546E7A;color:#546E7A;font-weight:500;}
+.role-toggle{display:flex;gap:8px;}
+.role-btn{flex:1;padding:8px;border-radius:8px;border:1.5px solid #eee;background:#fff;font-size:13px;color:#aaa;cursor:pointer;}
+.role-btn.active{border-color:var(--sau-red);background:var(--sau-red-tint);color:var(--sau-red);font-weight:500;}
+.btn-primary{width:100%;padding:11px;border-radius:8px;background:var(--sau-red);color:#fff;border:none;font-size:14px;font-weight:500;cursor:pointer;margin-top:.5rem;}
+.btn-primary:hover{background:var(--sau-red-dark);}
+.btn-ghost{width:100%;padding:9px;border-radius:8px;background:transparent;color:#888;border:.5px solid #ddd;font-size:13px;cursor:pointer;margin-top:8px;}
+.btn-ghost:hover{background:#f5f5f5;}
+.divider-line{display:flex;align-items:center;gap:10px;margin:1.25rem 0;}
+.divider-line span{font-size:12px;color:#ccc;white-space:nowrap;}
+.divider-line::before,.divider-line::after{content:'';flex:1;height:.5px;background:#eee;}
+.error-msg{font-size:12px;color:#C0392B;margin-top:6px;display:none;}
+.tabs{display:flex;gap:6px;margin-bottom:1.1rem;}
+.tab{padding:7px 18px;font-size:13px;border-radius:8px;cursor:pointer;border:.5px solid var(--sau-border);color:#888;background:transparent;}
+.tab.active{background:var(--sau-red);color:#fff;border-color:var(--sau-red);font-weight:500;}
+.tab:hover:not(.active){background:var(--sau-red-tint);color:var(--sau-red);}
+.major-legend{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#555;}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.search-bar{display:flex;gap:8px;margin-bottom:1rem;align-items:center;}
+.search-wrap{flex:1;position:relative;}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;color:#aaa;pointer-events:none;}
+.search-wrap input{width:100%;padding-left:32px;}
+.layout{display:grid;grid-template-columns:210px 1fr;gap:1.25rem;}
+.sidebar{background:#fff;border-radius:12px;border:.5px solid var(--sau-border);padding:1rem;max-height:860px;overflow-y:auto;}
+.sidebar-title{font-size:11px;font-weight:500;color:var(--sau-red);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid var(--sau-red);}
+.filter-section{margin-bottom:.8rem;}
+.filter-label{font-size:10px;font-weight:500;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.filter-group{display:flex;flex-direction:column;gap:5px;}
+.filter-chip{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#555;cursor:pointer;}
+.filter-chip input[type=checkbox]{accent-color:var(--sau-red);width:13px;height:13px;}
+.filter-chip:hover{color:var(--sau-red);}
+.range-row{display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:3px;}
+input[type=range]{accent-color:var(--sau-red);}
+.sb-divider{border:none;border-top:.5px solid var(--sau-border);margin:.6rem 0;}
+.mbti-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.mbti-btn{font-size:11px;padding:4px 5px;border-radius:5px;border:.5px solid #ddd;background:transparent;color:#777;cursor:pointer;}
+.mbti-btn.active{background:var(--sau-red);color:#fff;border-color:var(--sau-red);font-weight:500;}
+.mbti-btn:hover:not(.active){background:var(--sau-red-tint);color:var(--sau-red);}
+.skin-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.skin-btn{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:6px;border:.5px solid #ddd;background:transparent;cursor:pointer;font-size:11.5px;color:#666;}
+.skin-btn .sw{width:16px;height:16px;border-radius:50%;flex-shrink:0;border:.5px solid rgba(0,0,0,.1);}
+.skin-btn.active{border-color:var(--sau-red);background:var(--sau-red-tint);color:var(--sau-red);font-weight:500;}
+.mole-face{position:relative;width:82px;height:92px;margin:6px auto 6px;}
+.mole-face svg{width:100%;height:100%;}
+.mole-spot{cursor:pointer;}
+.mole-leg{display:flex;flex-direction:column;gap:3px;}
+.ml-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#666;cursor:pointer;padding:1px 0;}
+.ml-item .dot{width:8px;height:8px;border-radius:50%;background:#ccc;flex-shrink:0;}
+.ml-item.active .dot{background:#5C3317;}
+.ml-item.active{color:#3d1a00;font-weight:500;}
+.clear-btn{font-size:11px;color:#aaa;background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;margin-top:5px;}
+.clear-btn:hover{color:var(--sau-red);}
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;}
+.results-count{font-size:13px;color:#888;}
+.results-count strong{color:var(--sau-red);font-weight:500;}
+.actor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px;}
+.actor-card{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .12s;border:1.5px solid transparent;}
+.actor-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px);}
+.actor-card.major-영화{border-color:var(--film-border);}
+.actor-card.major-방송{border-color:var(--broadcast-border);}
+.actor-card.major-연기{border-color:var(--acting-border);}
+.actor-card.major-연극{border-color:var(--theater-border);}
+.actor-photo{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:500;position:relative;}
+.actor-card.major-영화 .actor-photo{background:var(--film-bg);}
+.actor-card.major-방송 .actor-photo{background:var(--broadcast-bg);}
+.actor-card.major-연기 .actor-photo{background:var(--acting-bg);}
+.actor-card.major-연극 .actor-photo{background:var(--theater-bg);}
+.actor-card.major-영화 .actor-initial{color:var(--film-color);}
+.actor-card.major-방송 .actor-initial{color:var(--broadcast-color);}
+.actor-card.major-연기 .actor-initial{color:var(--acting-color);}
+.actor-card.major-연극 .actor-initial{color:var(--theater-color);}
+.major-bar{height:4px;width:100%;}
+.actor-card.major-영화 .major-bar{background:var(--film-color);}
+.actor-card.major-방송 .major-bar{background:var(--broadcast-color);}
+.actor-card.major-연기 .major-bar{background:var(--acting-color);}
+.actor-card.major-연극 .major-bar{background:var(--theater-color);}
+.skin-dot{position:absolute;bottom:6px;right:6px;width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);}
+.actor-info{padding:8px 10px;}
+.actor-name{font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:2px;}
+.actor-meta{font-size:10px;color:#888;line-height:1.5;}
+.actor-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px;}
+.tag{font-size:10px;padding:2px 6px;border-radius:999px;}
+.tag-영화{background:var(--film-bg);color:var(--film-color);border:.5px solid var(--film-border);}
+.tag-방송{background:var(--broadcast-bg);color:var(--broadcast-color);border:.5px solid var(--broadcast-border);}
+.tag-연기{background:var(--acting-bg);color:var(--acting-color);border:.5px solid var(--acting-border);}
+.tag-연극{background:var(--theater-bg);color:var(--theater-color);border:.5px solid var(--theater-border);}
+.tag-f{background:#F0EBF8;color:#6B3FA0;}
+.tag-m{background:#E8F4EC;color:#2D6B42;}
+.tag-mole{background:#F5EDE6;color:#8B5E3C;}
+.tag-tattoo{background:#FEF0F0;color:#C0392B;border:.5px solid #F5C6C6;}
+.tag-mbti{background:#F5F5F5;color:#666;border:.5px solid #ddd;}
+.no-result{grid-column:1/-1;text-align:center;padding:2.5rem 0;color:#bbb;font-size:14px;}
+/* 모달 */
+.modal-bg{display:none;min-height:500px;background:rgba(0,0,0,.5);position:absolute;top:0;left:0;width:100%;align-items:flex-start;justify-content:center;padding-top:1.25rem;z-index:10;}
+.modal-bg.open{display:flex;}
+.modal{background:#fff;border-radius:14px;width:560px;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-hd{border-radius:13px 13px 0 0;padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;}
+.modal-av{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;flex-shrink:0;background:rgba(255,255,255,.2);color:#fff;}
+.modal-name{font-size:18px;font-weight:500;color:#fff;margin-bottom:3px;}
+.modal-sub{font-size:12px;color:rgba(255,255,255,.78);}
+.modal-x{position:absolute;top:12px;right:14px;cursor:pointer;font-size:18px;background:none;border:none;color:rgba(255,255,255,.8);}
+.modal-body{padding:1.1rem 1.25rem;}
+.sec-div{border:none;border-top:.5px solid #eee;margin:.8rem 0;}
+.sec-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:.8rem;}
+.spec-item{border-radius:8px;padding:7px 9px;}
+.spec-key{font-size:10px;color:#aaa;}
+.spec-val{font-size:13px;font-weight:500;color:#1a1a1a;}
+
+/* ── 오디션 제안 버튼 & 완료 상태 ── */
+.contact-btn{
+  width:100%;padding:11px;border-radius:8px;color:#fff;border:none;
+  font-size:14px;font-weight:500;cursor:pointer;margin-top:1rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s,transform .1s;
+}
+.contact-btn:hover:not(.sent){filter:brightness(.9);}
+.contact-btn:active:not(.sent){transform:scale(.98);}
+.contact-btn.sent{cursor:default;background:#4CAF50 !important;}
+
+/* 팝업 알림 */
+.send-popup{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:#1a1a1a;color:#fff;font-size:13px;padding:12px 24px;
+  border-radius:10px;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  z-index:999;white-space:nowrap;display:flex;align-items:center;gap:8px;
+}
+.send-popup.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.send-popup .check-circle{
+  width:20px;height:20px;border-radius:50%;background:#4CAF50;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+</style>
+
+<div class="wrap" style="position:relative;">
+<h2 class="sr-only">SAU CAST 서울예술대학교 배우 포트폴리오 플랫폼</h2>
+
+<div class="header">
+  <div class="logo-area">
+    <svg width="36" height="36" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="38" fill="rgba(255,255,255,.15)"/>
+      <path d="M28,68 C20,60 16,50 20,38 C22,30 18,24 14,20 C20,22 24,26 24,32 C26,22 32,14 40,10 C36,20 38,26 44,22 C42,30 46,34 52,30 C50,40 54,46 60,44 C58,54 50,62 40,66 C36,68 32,68 28,68Z" fill="white"/>
+    </svg>
+    <div>
+      <div class="logo-ko">서울예술대학교 SAU CAST</div>
+      <div class="logo-en">Seoul Institute of the Arts</div>
+      <div class="logo-sub">배우 포트폴리오 플랫폼</div>
+    </div>
+  </div>
+  <div id="header-auth">
+    <div style="display:flex;gap:6px;">
+      <button class="nav-btn" style="background:rgba(255,255,255,.15);border:.5px solid rgba(255,255,255,.3);color:#fff;" onclick="showAuth('login')">로그인</button>
+      <button class="nav-btn" style="background:#fff;border:none;color:var(--sau-red);font-weight:500;" onclick="showAuth('signup')">회원가입</button>
+    </div>
+  </div>
+  <div id="header-user" style="display:none;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="display:flex;gap:4px;">
+        <span style="cursor:pointer;color:#fff;font-size:12px;padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.2);font-weight:500;">배우 찾기</span>
+        <span style="cursor:pointer;color:rgba(255,255,255,.75);font-size:12px;padding:5px 10px;border-radius:6px;">감독 필모</span>
+        <span style="cursor:pointer;color:rgba(255,255,255,.75);font-size:12px;padding:5px 10px;border-radius:6px;">오디션 공고</span>
+      </div>
+      <div class="user-chip"><i class="ti ti-user" aria-hidden="true" style="font-size:13px;color:#fff;"></i><span id="user-name-display">kbs1645</span></div>
+      <button class="nav-btn nav-logout" onclick="doLogout()">로그아웃</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div id="screen-auth">
+  <div class="auth-wrap">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="showAuth('login')">로그인</button>
+      <button class="auth-tab" id="tab-signup" onclick="showAuth('signup')">회원가입</button>
+    </div>
+    <div id="form-login" class="card">
+      <div class="card-title">다시 만나서 반가워요 👋</div>
+      <div class="card-sub">서울예술대학교 구성원만 이용할 수 있어요</div>
+      <div class="field"><label>아이디</label><input type="text" id="login-id" placeholder="아이디 입력"/></div>
+      <div class="field">
+        <label>비밀번호</label>
+        <input type="password" id="login-pw" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div class="error-msg" id="login-err">아이디 또는 비밀번호가 틀렸어요</div>
+      </div>
+      <div style="background:#F0F7FF;border:.5px solid #B3D4F5;border-radius:8px;padding:8px 12px;font-size:12px;color:#1565C0;margin-bottom:.5rem;">
+        <i class="ti ti-info-circle" aria-hidden="true"></i> 데모 계정 — 아이디: <strong>kbs1645</strong> / 비번: <strong>1234</strong>
+      </div>
+      <button class="btn-primary" onclick="doLogin()">로그인</button>
+      <div class="divider-line"><span>또는</span></div>
+      <button class="btn-ghost" onclick="showAuth('signup')">아직 계정이 없어요 — 회원가입</button>
+    </div>
+    <div id="form-signup" class="card" style="display:none;">
+      <div class="card-title">SAU CAST 가입하기</div>
+      <div class="card-sub">학번 입력 후 관리자 승인을 받으면 이용할 수 있어요</div>
+      <div class="field"><label>나는</label><div class="role-toggle"><button class="role-btn active" id="role-actor" onclick="setRole('actor')">🎭 배우 / 재학·졸업생</button><button class="role-btn" id="role-director" onclick="setRole('director')">🎬 감독 / 연출</button></div></div>
+      <div class="field-row">
+        <div class="field" style="margin-bottom:0;"><label>이름</label><input type="text" id="sig-name" placeholder="홍길동"/></div>
+        <div class="field" style="margin-bottom:0;"><label>학번</label><input type="text" id="sig-grade" placeholder="예: 21학번"/><div class="field-hint">졸업생도 가능</div></div>
+      </div>
+      <div class="field" style="margin-top:1rem;"><label>전공</label>
+        <div class="major-grid">
+          <button class="major-btn m-영화" onclick="setMajor('영화')"><span class="major-dot" style="background:#2E7D32;"></span>영화과</button>
+          <button class="major-btn m-방송" onclick="setMajor('방송')"><span class="major-dot" style="background:#F57F17;"></span>방송과</button>
+          <button class="major-btn m-연기" onclick="setMajor('연기')"><span class="major-dot" style="background:#E65100;"></span>연기과</button>
+          <button class="major-btn m-연극" onclick="setMajor('연극')"><span class="major-dot" style="background:#546E7A;"></span>연극과</button>
+        </div>
+      </div>
+      <div class="field"><label>재학 / 졸업</label><select id="sig-status"><option value="">선택</option><option>재학생</option><option>졸업생</option><option>휴학생</option></select></div>
+      <div class="field-row">
+        <div class="field" style="margin-bottom:0;"><label>아이디</label><input type="text" id="sig-id" placeholder="아이디"/></div>
+        <div class="field" style="margin-bottom:0;"><label>비밀번호</label><input type="password" id="sig-pw" placeholder="8자 이상"/></div>
+      </div>
+      <div class="field" style="margin-top:1rem;"><label>이메일</label><input type="email" id="sig-email" placeholder="연락받을 이메일"/></div>
+      <div style="background:#FFF8E1;border:.5px solid #FFE082;border-radius:8px;padding:10px 12px;margin:1rem 0;font-size:12px;color:#7B5800;line-height:1.6;"><i class="ti ti-info-circle" aria-hidden="true"></i> 가입 후 <strong>관리자가 학번 확인</strong> 후 승인해요. 보통 <strong>1~2일</strong> 소요돼요.</div>
+      <button class="btn-primary" onclick="doSignup()">가입 신청하기</button>
+      <button class="btn-ghost" onclick="showAuth('login')">이미 계정이 있어요</button>
+    </div>
+    <div id="form-pending" class="card" style="display:none;text-align:center;">
+      <div style="font-size:40px;margin-bottom:1rem;">⏳</div>
+      <div style="font-size:17px;font-weight:500;color:#1a1a1a;margin-bottom:6px;">가입 신청 완료!</div>
+      <div style="font-size:13px;color:#888;line-height:1.7;margin-bottom:1.25rem;">관리자가 학번 확인 후 승인해드려요.</div>
+      <div style="background:var(--sau-red-tint);border:.5px solid var(--sau-border);border-radius:10px;padding:1rem;text-align:left;margin-bottom:1rem;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;"><span style="color:#aaa;">이름</span><span id="p-name" style="font-weight:500;">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;"><span style="color:#aaa;">학번</span><span id="p-grade" style="font-weight:500;">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;"><span style="color:#aaa;">전공</span><span id="p-major" style="font-weight:500;">—</span></div>
+      </div>
+      <button class="btn-ghost" onclick="showAuth('login')">로그인으로 돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="screen-main" style="display:none;">
+  <div class="tabs">
+    <button class="tab active" onclick="setTab(this,'actors')">배우</button>
+    <button class="tab" onclick="setTab(this,'directors')">감독 / 연출</button>
+  </div>
+  <div id="view-actors">
+    <div class="major-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#2E7D32;"></div>영화과</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#F57F17;"></div>방송과</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E65100;"></div>연기과</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#546E7A;"></div>연극과</div>
+    </div>
+    <div class="search-bar">
+      <div class="search-wrap"><i class="ti ti-search" aria-hidden="true"></i><input type="text" placeholder="이름, 전공, 특기, MBTI 검색..." id="searchInput" oninput="filterActors()"/></div>
+      <select onchange="filterActors()" id="genderFilter"><option value="">성별 전체</option><option value="여">여성</option><option value="남">남성</option></select>
+      <select onchange="filterActors()" id="majorFilter"><option value="">전공 전체</option><option value="영화">영화</option><option value="방송">방송</option><option value="연기">연기</option><option value="연극">연극</option></select>
+    </div>
+    <div class="layout">
+      <div class="sidebar">
+        <div class="sidebar-title">🔍 상세 필터</div>
+        <div class="filter-section"><div class="filter-label">나이</div><input type="range" min="18" max="70" step="1" value="70" id="ageRange" oninput="updateAge(this);filterActors()" style="width:100%"/><div class="range-row"><span>18세</span><span id="ageVal">70세 이하</span></div></div>
+        <div class="filter-section"><div class="filter-label">키</div><input type="range" min="140" max="220" step="1" value="220" id="heightRange" oninput="updateHeight(this);filterActors()" style="width:100%"/><div class="range-row"><span>140cm</span><span id="heightVal">220cm 이하</span></div></div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">피부톤</div>
+          <div class="skin-grid">
+            <button class="skin-btn" id="skin-매우밝음" onclick="toggleSkin('매우밝음')"><span class="sw" style="background:#FDDBB4;"></span>매우 밝음</button>
+            <button class="skin-btn" id="skin-밝음"     onclick="toggleSkin('밝음')">    <span class="sw" style="background:#F5C28A;"></span>밝은 편</button>
+            <button class="skin-btn" id="skin-보통"     onclick="toggleSkin('보통')">    <span class="sw" style="background:#E0A96D;"></span>보통</button>
+            <button class="skin-btn" id="skin-구릿빛"   onclick="toggleSkin('구릿빛')">  <span class="sw" style="background:#C47B3A;"></span>구릿빛</button>
+            <button class="skin-btn" id="skin-어두움"   onclick="toggleSkin('어두움')">  <span class="sw" style="background:#8D5524;"></span>어두운 편</button>
+            <button class="skin-btn" id="skin-매우어두움" onclick="toggleSkin('매우어두움')"><span class="sw" style="background:#4A2912;"></span>매우 어두움</button>
+          </div>
+          <button class="clear-btn" onclick="clearSkin()">전체 해제</button>
+        </div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">MBTI</div>
+          <div class="mbti-grid">
+            <button class="mbti-btn" onclick="toggleMBTI('INTJ')">INTJ</button><button class="mbti-btn" onclick="toggleMBTI('INTP')">INTP</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ENTJ')">ENTJ</button><button class="mbti-btn" onclick="toggleMBTI('ENTP')">ENTP</button>
+            <button class="mbti-btn" onclick="toggleMBTI('INFJ')">INFJ</button><button class="mbti-btn" onclick="toggleMBTI('INFP')">INFP</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ENFJ')">ENFJ</button><button class="mbti-btn" onclick="toggleMBTI('ENFP')">ENFP</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ISTJ')">ISTJ</button><button class="mbti-btn" onclick="toggleMBTI('ISFJ')">ISFJ</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ESTJ')">ESTJ</button><button class="mbti-btn" onclick="toggleMBTI('ESFJ')">ESFJ</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ISTP')">ISTP</button><button class="mbti-btn" onclick="toggleMBTI('ISFP')">ISFP</button>
+            <button class="mbti-btn" onclick="toggleMBTI('ESTP')">ESTP</button><button class="mbti-btn" onclick="toggleMBTI('ESFP')">ESFP</button>
+          </div>
+          <button class="clear-btn" onclick="clearMBTI()">전체 해제</button>
+        </div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">머리스타일</div><div class="filter-group">
+          <label class="filter-chip"><input type="checkbox" value="단발" onchange="filterActors()"> 단발</label>
+          <label class="filter-chip"><input type="checkbox" value="장발" onchange="filterActors()"> 장발</label>
+          <label class="filter-chip"><input type="checkbox" value="숏컷" onchange="filterActors()"> 숏컷</label>
+          <label class="filter-chip"><input type="checkbox" value="스포츠" onchange="filterActors()"> 스포츠</label>
+          <label class="filter-chip"><input type="checkbox" value="삭발" onchange="filterActors()"> 삭발</label>
+        </div></div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">생김새</div><div class="filter-group">
+          <label class="filter-chip"><input type="checkbox" value="청순" onchange="filterActors()"> 청순</label>
+          <label class="filter-chip"><input type="checkbox" value="강렬" onchange="filterActors()"> 강렬</label>
+          <label class="filter-chip"><input type="checkbox" value="귀여움" onchange="filterActors()"> 귀여움</label>
+          <label class="filter-chip"><input type="checkbox" value="중성적" onchange="filterActors()"> 중성적</label>
+        </div></div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">문신 여부</div><div class="filter-group">
+          <label class="filter-chip"><input type="checkbox" value="없음" onchange="filterActors()"> 없음</label>
+          <label class="filter-chip"><input type="checkbox" value="팔" onchange="filterActors()"> 팔</label>
+          <label class="filter-chip"><input type="checkbox" value="등" onchange="filterActors()"> 등</label>
+          <label class="filter-chip"><input type="checkbox" value="다리" onchange="filterActors()"> 다리</label>
+          <label class="filter-chip"><input type="checkbox" value="허벅지" onchange="filterActors()"> 허벅지</label>
+          <label class="filter-chip"><input type="checkbox" value="얼굴" onchange="filterActors()"> 얼굴</label>
+        </div></div>
+        <hr class="sb-divider">
+        <div class="filter-section"><div class="filter-label">얼굴 점 위치</div>
+          <p style="font-size:10px;color:#bbb;margin-bottom:5px;">얼굴 클릭해서 선택</p>
+          <div class="mole-face">
+            <svg viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="45" cy="46" rx="30" ry="36" fill="#fff5f5" stroke="#e0c0c0" stroke-width="1"/><ellipse cx="34" cy="38" rx="5" ry="3.5" fill="#ffe8e8" stroke="#ddd" stroke-width=".8"/><ellipse cx="56" cy="38" rx="5" ry="3.5" fill="#ffe8e8" stroke="#ddd" stroke-width=".8"/><ellipse cx="45" cy="52" rx="3" ry="2" fill="#ffe8e8" stroke="#ddd" stroke-width=".8"/><path d="M38,62 Q45,67 52,62" stroke="#ccc" stroke-width="1" fill="none"/><ellipse cx="28" cy="10" rx="10" ry="7" fill="#fff5f5" stroke="#e0c0c0" stroke-width=".8" transform="rotate(-20,28,10)"/><ellipse cx="62" cy="10" rx="10" ry="7" fill="#fff5f5" stroke="#e0c0c0" stroke-width=".8" transform="rotate(20,62,10)"/></svg>
+            <svg viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:100%;height:100%;">
+              <g class="mole-spot" id="ms-이마" onclick="toggleMole('이마')"><circle cx="45" cy="18" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-왼쪽눈밑" onclick="toggleMole('왼쪽눈밑')"><circle cx="30" cy="44" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-오른쪽눈밑" onclick="toggleMole('오른쪽눈밑')"><circle cx="60" cy="44" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-코아래" onclick="toggleMole('코아래')"><circle cx="45" cy="57" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-왼쪽볼" onclick="toggleMole('왼쪽볼')"><circle cx="18" cy="54" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-오른쪽볼" onclick="toggleMole('오른쪽볼')"><circle cx="72" cy="54" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-입가왼쪽" onclick="toggleMole('입가왼쪽')"><circle cx="34" cy="66" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-입가오른쪽" onclick="toggleMole('입가오른쪽')"><circle cx="56" cy="66" r="5" fill="#ddd" opacity=".5"/></g>
+              <g class="mole-spot" id="ms-턱" onclick="toggleMole('턱')"><circle cx="45" cy="80" r="5" fill="#ddd" opacity=".5"/></g>
+            </svg>
+          </div>
+          <div class="mole-leg">
+            <div class="ml-item" id="ml-이마" onclick="toggleMole('이마')"><div class="dot"></div>이마</div>
+            <div class="ml-item" id="ml-왼쪽눈밑" onclick="toggleMole('왼쪽눈밑')"><div class="dot"></div>왼쪽 눈 밑</div>
+            <div class="ml-item" id="ml-오른쪽눈밑" onclick="toggleMole('오른쪽눈밑')"><div class="dot"></div>오른쪽 눈 밑</div>
+            <div class="ml-item" id="ml-코아래" onclick="toggleMole('코아래')"><div class="dot"></div>코 아래</div>
+            <div class="ml-item" id="ml-왼쪽볼" onclick="toggleMole('왼쪽볼')"><div class="dot"></div>왼쪽 볼</div>
+            <div class="ml-item" id="ml-오른쪽볼" onclick="toggleMole('오른쪽볼')"><div class="dot"></div>오른쪽 볼</div>
+            <div class="ml-item" id="ml-입가왼쪽" onclick="toggleMole('입가왼쪽')"><div class="dot"></div>입가 왼쪽</div>
+            <div class="ml-item" id="ml-입가오른쪽" onclick="toggleMole('입가오른쪽')"><div class="dot"></div>입가 오른쪽</div>
+            <div class="ml-item" id="ml-턱" onclick="toggleMole('턱')"><div class="dot"></div>턱</div>
+          </div>
+          <button class="clear-btn" onclick="clearMoles()">전체 해제</button>
+        </div>
+      </div>
+      <div>
+        <div class="results-header"><span class="results-count" id="countLabel">배우 <strong>30</strong>명</span><select id="sortSel" onchange="filterActors()"><option value="name">이름순</option><option value="age">나이순</option><option value="height">키순</option></select></div>
+        <div class="actor-grid" id="actorGrid"></div>
+      </div>
+    </div>
+  </div>
+  <div id="view-directors" style="display:none;"><p style="color:#aaa;font-size:14px;padding:2rem 0;">감독 필모그래피 준비 중</p></div>
+</div>
+
+<div class="modal-bg" id="modal" onclick="closeModal(event)"><div class="modal" id="modalContent"></div></div>
+
+<!-- 전송 완료 팝업 -->
+<div class="send-popup" id="sendPopup">
+  <div class="check-circle"><i class="ti ti-check" aria-hidden="true" style="font-size:12px;color:#fff;"></i></div>
+  <span id="sendPopupText">오디션 제안을 보냈습니다!</span>
+</div>
+</div>
+
+<script>
+const ACCOUNTS={'kbs1645':{pw:'1234'}};
+const MS={
+  '영화':{bg:'#E8F5E9',color:'#2E7D32',border:'#A5D6A7'},
+  '방송':{bg:'#FFFDE7',color:'#F57F17',border:'#FFE082'},
+  '연기':{bg:'#FFF3E0',color:'#E65100',border:'#FFCC80'},
+  '연극':{bg:'#F5F5F5',color:'#546E7A',border:'#B0BEC5'},
+};
+const SKINS={'매우밝음':{hex:'#FDDBB4',label:'매우 밝음'},'밝음':{hex:'#F5C28A',label:'밝은 편'},'보통':{hex:'#E0A96D',label:'보통'},'구릿빛':{hex:'#C47B3A',label:'구릿빛'},'어두움':{hex:'#8D5524',label:'어두운 편'},'매우어두움':{hex:'#4A2912',label:'매우 어두움'}};
+const MPOS={'이마':{cx:45,cy:18},'왼쪽눈밑':{cx:30,cy:44},'오른쪽눈밑':{cx:60,cy:44},'코아래':{cx:45,cy:57},'왼쪽볼':{cx:18,cy:54},'오른쪽볼':{cx:72,cy:54},'입가왼쪽':{cx:34,cy:66},'입가오른쪽':{cx:56,cy:66},'턱':{cx:45,cy:80}};
+const MLAB={'이마':'이마','왼쪽눈밑':'왼쪽 눈 밑','오른쪽눈밑':'오른쪽 눈 밑','코아래':'코 아래','왼쪽볼':'왼쪽 볼','오른쪽볼':'오른쪽 볼','입가왼쪽':'입가 왼쪽','입가오른쪽':'입가 오른쪽','턱':'턱'};
+
+const actors=[
+  {id:1,name:'김다은',gender:'여',major:'영화',age:22,height:163,weight:48,hair:'단발',look:'청순',mbti:'INFP',skin:'매우밝음',grade:'21학번',spec:['연기','노래'],tattoo:[],moles:['입가왼쪽'],films:['단편영화 주연 (2023)','학교연극 (2022)']},
+  {id:2,name:'이준서',gender:'남',major:'연극',age:24,height:178,weight:68,hair:'숏컷',look:'강렬',mbti:'ENTJ',skin:'보통',grade:'20학번',spec:['연기','검술'],tattoo:['팔'],moles:[],films:['연극 맥베스 (2023)','단편영화 (2022)']},
+  {id:3,name:'박서윤',gender:'여',major:'방송',age:21,height:167,weight:52,hair:'장발',look:'귀여움',mbti:'ENFP',skin:'밝음',grade:'22학번',spec:['연기','댄스'],tattoo:[],moles:['오른쪽눈밑','입가오른쪽'],films:['방송 파일럿 (2024)']},
+  {id:4,name:'최민호',gender:'남',major:'영화',age:25,height:182,weight:73,hair:'스포츠',look:'강렬',mbti:'ISTP',skin:'구릿빛',grade:'19학번',spec:['연기','무술'],tattoo:['등','팔'],moles:['이마'],films:['독립영화 (2023)','단편 (2021)']},
+  {id:5,name:'정하은',gender:'여',major:'연극',age:23,height:160,weight:47,hair:'단발',look:'중성적',mbti:'INFJ',skin:'밝음',grade:'21학번',spec:['연기','피아노'],tattoo:[],moles:['왼쪽볼'],films:['연극 오셀로 (2023)','단막극 (2022)']},
+  {id:6,name:'오태양',gender:'남',major:'방송',age:22,height:176,weight:65,hair:'장발',look:'귀여움',mbti:'ESFP',skin:'보통',grade:'22학번',spec:['연기','기타'],tattoo:['허벅지'],moles:[],films:['유튜브 단편 (2024)']},
+  {id:7,name:'윤지아',gender:'여',major:'영화',age:26,height:165,weight:51,hair:'장발',look:'청순',mbti:'ISFJ',skin:'매우밝음',grade:'18학번',spec:['연기','무용'],tattoo:[],moles:['코아래','이마'],films:['단편영화 주연 (2024)','졸업작품 (2023)']},
+  {id:8,name:'한승우',gender:'남',major:'연극',age:23,height:180,weight:70,hair:'삭발',look:'강렬',mbti:'ESTP',skin:'어두움',grade:'21학번',spec:['연기','격투'],tattoo:['얼굴','팔'],moles:['턱'],films:['연극 리어왕 (2024)']},
+  {id:9,name:'임나연',gender:'여',major:'연기',age:20,height:162,weight:49,hair:'단발',look:'귀여움',mbti:'ENFJ',skin:'밝음',grade:'23학번',spec:['연기','MC'],tattoo:[],moles:['입가오른쪽'],films:['교내 공연 (2023)']},
+  {id:10,name:'강도현',gender:'남',major:'영화',age:27,height:185,weight:78,hair:'삭발',look:'중성적',mbti:'INTJ',skin:'구릿빛',grade:'17학번',spec:['연기','촬영'],tattoo:['다리'],moles:[],films:['졸업영화 (2023)','독립영화 (2022)']},
+  {id:11,name:'신예진',gender:'여',major:'연기',age:21,height:158,weight:46,hair:'장발',look:'청순',mbti:'ISFP',skin:'매우밝음',grade:'22학번',spec:['연기','성악'],tattoo:[],moles:['왼쪽눈밑','왼쪽볼'],films:['뮤지컬 공연 (2024)']},
+  {id:12,name:'류건우',gender:'남',major:'방송',age:24,height:177,weight:67,hair:'숏컷',look:'귀여움',mbti:'ENFP',skin:'매우어두움',grade:'20학번',spec:['연기','랩'],tattoo:['팔'],moles:['오른쪽볼'],films:['방송 단편 (2023)','웹드라마 (2022)']},
+  {id:13,name:'서지호',gender:'남',major:'영화',age:22,height:179,weight:67,hair:'숏컷',look:'청순',mbti:'ISFJ',skin:'밝음',grade:'22학번',spec:['연기','사진'],tattoo:[],moles:['입가왼쪽'],films:['단편 연출/출연 (2024)']},
+  {id:14,name:'김보경',gender:'여',major:'연극',age:25,height:161,weight:50,hair:'단발',look:'강렬',mbti:'ENTJ',skin:'보통',grade:'19학번',spec:['연기','성악'],tattoo:['등'],moles:[],films:['연극 햄릿 (2024)','창작극 (2023)']},
+  {id:15,name:'박준형',gender:'남',major:'연기',age:23,height:183,weight:74,hair:'스포츠',look:'강렬',mbti:'ESTP',skin:'구릿빛',grade:'21학번',spec:['연기','격투기'],tattoo:['팔','허벅지'],moles:['이마'],films:['단편영화 (2023)']},
+  {id:16,name:'이수아',gender:'여',major:'방송',age:20,height:166,weight:51,hair:'장발',look:'귀여움',mbti:'ESFJ',skin:'매우밝음',grade:'23학번',spec:['연기','아나운서'],tattoo:[],moles:['오른쪽눈밑'],films:['교내 방송 진행 (2024)']},
+  {id:17,name:'최재원',gender:'남',major:'영화',age:28,height:181,weight:76,hair:'장발',look:'중성적',mbti:'INTP',skin:'보통',grade:'16학번',spec:['연기','시나리오'],tattoo:['다리'],moles:[],films:['졸업작품 주연 (2022)','독립영화 (2023)']},
+  {id:18,name:'한아름',gender:'여',major:'연극',age:22,height:159,weight:47,hair:'단발',look:'청순',mbti:'INFP',skin:'밝음',grade:'22학번',spec:['연기','무용'],tattoo:[],moles:['입가왼쪽','왼쪽볼'],films:['뮤지컬 단역 (2024)']},
+  {id:19,name:'오민재',gender:'남',major:'연기',age:21,height:174,weight:63,hair:'숏컷',look:'귀여움',mbti:'ENFP',skin:'밝음',grade:'23학번',spec:['연기','댄스'],tattoo:[],moles:[],films:['교내 공연 주연 (2024)']},
+  {id:20,name:'장유리',gender:'여',major:'영화',age:24,height:168,weight:53,hair:'장발',look:'청순',mbti:'ISFJ',skin:'매우밝음',grade:'20학번',spec:['연기','편집'],tattoo:[],moles:['코아래'],films:['단편영화 조연 (2023)','졸업작품 (2024)']},
+  {id:21,name:'김성민',gender:'남',major:'연극',age:26,height:176,weight:70,hair:'스포츠',look:'강렬',mbti:'ISTJ',skin:'어두움',grade:'18학번',spec:['연기','검도'],tattoo:['팔'],moles:['턱'],films:['연극 로미오와 줄리엣 (2024)']},
+  {id:22,name:'이하늘',gender:'여',major:'방송',age:22,height:164,weight:50,hair:'단발',look:'귀여움',mbti:'ESFP',skin:'보통',grade:'22학번',spec:['연기','리포터'],tattoo:[],moles:['입가오른쪽','오른쪽볼'],films:['웹예능 출연 (2024)']},
+  {id:23,name:'정우성',gender:'남',major:'영화',age:29,height:186,weight:80,hair:'숏컷',look:'강렬',mbti:'ENTJ',skin:'구릿빛',grade:'15학번',spec:['연기','승마'],tattoo:['등','팔'],moles:[],films:['상업영화 조연 (2023)','단편 주연 (2022)']},
+  {id:24,name:'박미래',gender:'여',major:'연기',age:20,height:160,weight:46,hair:'장발',look:'청순',mbti:'INFJ',skin:'매우밝음',grade:'23학번',spec:['연기','클래식기타'],tattoo:[],moles:['왼쪽눈밑'],films:['교내 발표회 (2024)']},
+  {id:25,name:'윤승호',gender:'남',major:'방송',age:25,height:178,weight:69,hair:'장발',look:'중성적',mbti:'ENTP',skin:'밝음',grade:'19학번',spec:['연기','랩','댄스'],tattoo:['허벅지'],moles:[],films:['웹드라마 주연 (2023)','단편 (2022)']},
+  {id:26,name:'송지은',gender:'여',major:'연극',age:23,height:163,weight:49,hair:'숏컷',look:'중성적',mbti:'ISTP',skin:'보통',grade:'21학번',spec:['연기','마술'],tattoo:[],moles:['이마','코아래'],films:['실험극 (2024)','창작무용극 (2023)']},
+  {id:27,name:'김태양',gender:'남',major:'연기',age:22,height:175,weight:66,hair:'삭발',look:'강렬',mbti:'ESTP',skin:'어두움',grade:'22학번',spec:['연기','격투'],tattoo:['얼굴'],moles:['턱'],films:['단편 주연 (2024)']},
+  {id:28,name:'나은서',gender:'여',major:'영화',age:21,height:170,weight:54,hair:'장발',look:'귀여움',mbti:'ENFJ',skin:'밝음',grade:'23학번',spec:['연기','바이올린'],tattoo:[],moles:['입가왼쪽','입가오른쪽'],films:['단편 조연 (2024)']},
+  {id:29,name:'황현준',gender:'남',major:'연극',age:27,height:182,weight:75,hair:'장발',look:'청순',mbti:'INFP',skin:'매우밝음',grade:'17학번',spec:['연기','피리'],tattoo:[],moles:[],films:['연극 안티고네 (2024)','졸업작품 (2023)']},
+  {id:30,name:'조아연',gender:'여',major:'방송',age:24,height:165,weight:52,hair:'숏컷',look:'강렬',mbti:'ESTJ',skin:'구릿빛',grade:'20학번',spec:['연기','격투기','댄스'],tattoo:['다리'],moles:['오른쪽볼'],films:['웹드라마 조연 (2023)','방송출연 (2024)']},
+];
+
+let activeMoles=new Set(),activeMBTI=new Set(),activeSkins=new Set(),selMajor='',selRole='actor';
+let sentSet=new Set(); // 이미 보낸 배우 id 관리
+
+/* ── 오디션 제안 전송 ── */
+function sendAudition(id, name, btnEl) {
+  if (sentSet.has(id)) return;
+  sentSet.add(id);
+
+  // 버튼 상태 변경
+  btnEl.classList.add('sent');
+  btnEl.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i> 보냈습니다!';
+
+  // 팝업 표시
+  const popup = document.getElementById('sendPopup');
+  document.getElementById('sendPopupText').textContent = name + '님께 오디션 제안을 보냈습니다!';
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), 2800);
+}
+
+function showAuth(t){
+  ['login','signup','pending'].forEach(n=>{document.getElementById('form-'+n).style.display=n===t?'block':'none';});
+  document.getElementById('tab-login').classList.toggle('active',t==='login');
+  document.getElementById('tab-signup').classList.toggle('active',t==='signup');
+}
+function doLogin(){
+  const id=document.getElementById('login-id').value.trim();
+  const pw=document.getElementById('login-pw').value;
+  const err=document.getElementById('login-err');
+  if(!ACCOUNTS[id]||ACCOUNTS[id].pw!==pw){
+    err.style.display='block';
+    document.getElementById('login-id').style.borderColor='#C0392B';
+    document.getElementById('login-pw').style.borderColor='#C0392B';
+    return;
+  }
+  err.style.display='none';
+  document.getElementById('user-name-display').textContent=id;
+  document.getElementById('header-auth').style.display='none';
+  document.getElementById('header-user').style.display='block';
+  document.getElementById('screen-auth').style.display='none';
+  document.getElementById('screen-main').style.display='block';
+
+  // 팝업
+  const popup=document.getElementById('sendPopup');
+  document.getElementById('sendPopupText').textContent='환영해요, '+id+'님! 👋';
+  popup.classList.add('show');
+  setTimeout(()=>popup.classList.remove('show'),2500);
+
+  renderActors(actors);
+}
+function doLogout(){
+  document.getElementById('header-auth').style.display='block';
+  document.getElementById('header-user').style.display='none';
+  document.getElementById('screen-main').style.display='none';
+  document.getElementById('screen-auth').style.display='block';
+  document.getElementById('login-id').value='';
+  document.getElementById('login-pw').value='';
+  document.getElementById('login-id').style.borderColor='';
+  document.getElementById('login-pw').style.borderColor='';
+  document.getElementById('login-err').style.display='none';
+  sentSet.clear();
+  showAuth('login');
+}
+function setRole(r){selRole=r;['actor','director'].forEach(x=>document.getElementById('role-'+x).classList.toggle('active',x===r));}
+function setMajor(m){selMajor=m;document.querySelectorAll('.major-btn').forEach(b=>b.classList.remove('active'));const btn=document.querySelector('.major-btn.m-'+m);if(btn)btn.classList.add('active');}
+function doSignup(){
+  const name=document.getElementById('sig-name').value,grade=document.getElementById('sig-grade').value,email=document.getElementById('sig-email').value,pw=document.getElementById('sig-pw').value,status=document.getElementById('sig-status').value;
+  if(!name||!grade||!email||!pw||!selMajor||!status){return;}
+  document.getElementById('p-name').textContent=name;document.getElementById('p-grade').textContent=grade;document.getElementById('p-major').textContent=selMajor+'과';
+  showAuth('pending');
+}
+function toggleSkin(k){if(activeSkins.has(k))activeSkins.delete(k);else activeSkins.add(k);document.querySelectorAll('.skin-btn').forEach(b=>b.classList.toggle('active',activeSkins.has(b.id.replace('skin-',''))));filterActors();}
+function clearSkin(){activeSkins.clear();document.querySelectorAll('.skin-btn').forEach(b=>b.classList.remove('active'));filterActors();}
+function toggleMBTI(m){if(activeMBTI.has(m))activeMBTI.delete(m);else activeMBTI.add(m);document.querySelectorAll('.mbti-btn').forEach(b=>b.classList.toggle('active',activeMBTI.has(b.textContent)));filterActors();}
+function clearMBTI(){activeMBTI.clear();document.querySelectorAll('.mbti-btn').forEach(b=>b.classList.remove('active'));filterActors();}
+function toggleMole(key){
+  if(activeMoles.has(key))activeMoles.delete(key);else activeMoles.add(key);
+  document.querySelectorAll('.mole-spot').forEach(el=>{const k=el.id.replace('ms-',''),c=el.querySelector('circle');if(c){c.setAttribute('fill',activeMoles.has(k)?'#5C3317':'#ddd');c.setAttribute('opacity',activeMoles.has(k)?'1':'.5');}});
+  document.querySelectorAll('.ml-item').forEach(el=>el.classList.toggle('active',activeMoles.has(el.id.replace('ml-',''))));
+  filterActors();
+}
+function clearMoles(){activeMoles.clear();document.querySelectorAll('.mole-spot circle').forEach(c=>{c.setAttribute('fill','#ddd');c.setAttribute('opacity','.5');});document.querySelectorAll('.ml-item').forEach(el=>el.classList.remove('active'));filterActors();}
+function updateAge(el){document.getElementById('ageVal').textContent=el.value+'세 이하';}
+function updateHeight(el){document.getElementById('heightVal').textContent=el.value+'cm 이하';}
+function getChecked(){return[...document.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.value);}
+function filterActors(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase();
+  const gender=document.getElementById('genderFilter').value,major=document.getElementById('majorFilter').value;
+  const age=parseInt(document.getElementById('ageRange').value),height=parseInt(document.getElementById('heightRange').value);
+  const chk=getChecked();
+  const chkH=chk.filter(v=>['단발','장발','숏컷','스포츠','삭발'].includes(v));
+  const chkL=chk.filter(v=>['청순','강렬','귀여움','중성적'].includes(v));
+  const chkT=chk.filter(v=>['없음','팔','등','다리','허벅지','얼굴'].includes(v));
+  const sort=document.getElementById('sortSel').value;
+  let f=actors.filter(a=>{
+    if(q&&!a.name.includes(q)&&!a.major.includes(q)&&!a.spec.join('').includes(q)&&!(a.mbti||'').toLowerCase().includes(q))return false;
+    if(gender&&a.gender!==gender)return false;
+    if(major&&a.major!==major)return false;
+    if(a.age>age||a.height>height)return false;
+    if(chkH.length&&!chkH.includes(a.hair))return false;
+    if(chkL.length&&!chkL.includes(a.look))return false;
+    if(chkT.length){if(chkT.includes('없음')){if(a.tattoo.length)return false;}else{for(const t of chkT){if(!a.tattoo.includes(t))return false;}}}
+    if(activeSkins.size>0&&!activeSkins.has(a.skin))return false;
+    if(activeMBTI.size>0&&!activeMBTI.has(a.mbti))return false;
+    if(activeMoles.size>0){for(const m of activeMoles){if(!a.moles.includes(m))return false;}}
+    return true;
+  });
+  if(sort==='age')f.sort((a,b)=>a.age-b.age);
+  else if(sort==='height')f.sort((a,b)=>b.height-a.height);
+  else f.sort((a,b)=>a.name.localeCompare(b.name,'ko'));
+  document.getElementById('countLabel').innerHTML='배우 <strong>'+f.length+'</strong>명';
+  renderActors(f);
+}
+function renderActors(list){
+  const grid=document.getElementById('actorGrid');
+  if(!grid)return;
+  if(!list.length){grid.innerHTML='<div class="no-result">조건에 맞는 배우가 없습니다</div>';return;}
+  grid.innerHTML=list.map(a=>{
+    const skinHex=SKINS[a.skin]?.hex||'#E0A96D';
+    return`<div class="actor-card major-${a.major}" onclick="openModal(${a.id})">
+      <div class="major-bar"></div>
+      <div class="actor-photo"><span class="actor-initial">${a.name[0]}</span><span class="skin-dot" style="background:${skinHex};"></span></div>
+      <div class="actor-info">
+        <div class="actor-name">${a.name}</div>
+        <div class="actor-meta">${a.grade} · ${a.age}세 · ${a.height}cm · ${a.hair}</div>
+        <div class="actor-tags">
+          <span class="tag tag-${a.major}">${a.major}</span>
+          <span class="tag ${a.gender==='여'?'tag-f':'tag-m'}">${a.gender}</span>
+          ${a.mbti?`<span class="tag tag-mbti">${a.mbti}</span>`:''}
+          ${a.tattoo.length?`<span class="tag tag-tattoo">문신</span>`:''}
+          ${a.moles.length?`<span class="tag tag-mole">점${a.moles.length}</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function buildFaceSVG(moles,skinKey){
+  const hex=SKINS[skinKey]?.hex||'#E0A96D';
+  const dots=moles.map(k=>{const p=MPOS[k];return p?`<circle cx="${p.cx}" cy="${p.cy}" r="4.5" fill="#3d1a00" opacity=".85"/>`:''}).join('');
+  return`<svg viewBox="0 0 90 100" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:90px;"><ellipse cx="45" cy="46" rx="30" ry="36" fill="${hex}" stroke="rgba(0,0,0,.12)" stroke-width="1"/><ellipse cx="34" cy="38" rx="5" ry="3.5" fill="rgba(255,255,255,.25)" stroke="rgba(0,0,0,.08)" stroke-width=".8"/><ellipse cx="56" cy="38" rx="5" ry="3.5" fill="rgba(255,255,255,.25)" stroke="rgba(0,0,0,.08)" stroke-width=".8"/><ellipse cx="45" cy="52" rx="3" ry="2" fill="rgba(0,0,0,.08)" stroke="rgba(0,0,0,.08)" stroke-width=".8"/><path d="M38,62 Q45,67 52,62" stroke="rgba(0,0,0,.18)" stroke-width="1" fill="none"/><ellipse cx="28" cy="10" rx="10" ry="7" fill="${hex}" stroke="rgba(0,0,0,.1)" stroke-width=".8" transform="rotate(-20,28,10)"/><ellipse cx="62" cy="10" rx="10" ry="7" fill="${hex}" stroke="rgba(0,0,0,.1)" stroke-width=".8" transform="rotate(20,62,10)"/>${dots}</svg>`;
+}
+function openModal(id){
+  const a=actors.find(x=>x.id===id);
+  const m=MS[a.major]||MS['연극'];
+  const skinInfo=SKINS[a.skin]||{hex:'#E0A96D',label:'보통'};
+  const moleText=a.moles.length?a.moles.map(k=>MLAB[k]||k).join(', '):'없음';
+  const alreadySent=sentSet.has(id);
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-hd" style="background:${m.color};">
+      <div class="modal-av">${a.name[0]}</div>
+      <div><div class="modal-name">${a.name}</div><div class="modal-sub">${a.grade} · ${a.major}과 · ${a.gender}성 · ${a.mbti||'-'}</div></div>
+      <button class="modal-x" onclick="document.getElementById('modal').classList.remove('open')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="spec-grid">
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">나이</div><div class="spec-val">${a.age}세</div></div>
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">키 / 몸무게</div><div class="spec-val">${a.height}cm · ${a.weight}kg</div></div>
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">MBTI</div><div class="spec-val">${a.mbti||'-'}</div></div>
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">머리스타일</div><div class="spec-val">${a.hair}</div></div>
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">특기</div><div class="spec-val">${a.spec.join(', ')}</div></div>
+        <div class="spec-item" style="background:${m.bg};border:.5px solid ${m.border};"><div class="spec-key">문신</div><div class="spec-val" style="color:${a.tattoo.length?'#C0392B':'#1a1a1a'}">${a.tattoo.length?a.tattoo.join(', '):'없음'}</div></div>
+      </div>
+      <hr class="sec-div">
+      <div style="display:flex;gap:1.25rem;align-items:flex-start;">
+        <div style="flex-shrink:0;">
+          <div class="sec-title" style="color:${m.color};">피부톤 · 얼굴 점</div>
+          ${buildFaceSVG(a.moles,a.skin)}
+          <div style="display:flex;align-items:center;gap:4px;margin-top:5px;"><span style="width:9px;height:9px;border-radius:50%;background:${skinInfo.hex};border:.5px solid rgba(0,0,0,.15);flex-shrink:0;display:inline-block;"></span><span style="font-size:11px;color:#888;">${skinInfo.label}</span></div>
+          <div style="font-size:10px;color:#bbb;margin-top:2px;">점: ${moleText}</div>
+        </div>
+        <div style="flex:1;">
+          <div class="sec-title" style="color:${m.color};">출연작 / 경력</div>
+          ${a.films.map(f=>`<div style="font-size:12px;color:#666;padding:5px 0;border-bottom:.5px solid #eee;">${f}</div>`).join('')}
+          <div class="sec-title" style="color:${m.color};margin-top:.75rem;">특기</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">${a.spec.map(s=>`<span style="font-size:11px;padding:3px 8px;border-radius:999px;background:${m.bg};color:${m.color};border:.5px solid ${m.border};">${s}</span>`).join('')}</div>
+        </div>
+      </div>
+      <button
+        id="send-btn-${id}"
+        class="contact-btn${alreadySent?' sent':''}"
+        style="background:${alreadySent?'#4CAF50':m.color};"
+        onclick="sendAudition(${id},'${a.name}',this)"
+      >
+        ${alreadySent
+          ? '<i class="ti ti-check" aria-hidden="true"></i> 보냈습니다!'
+          : '<i class="ti ti-send" aria-hidden="true"></i> 오디션 제안 보내기'}
+      </button>
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){if(e.target.id==='modal')document.getElementById('modal').classList.remove('open');}
+function setTab(el,v){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('view-actors').style.display=v==='actors'?'block':'none';document.getElementById('view-directors').style.display=v==='directors'?'block':'none';}
+showAuth('login');
+</script>
